@@ -1,37 +1,61 @@
 #!/usr/bin/python3
-"""Module for FileStorage class."""
+""" Class FileStorage the serializes instances to a JSON file
+and deserializes JSON file to instances"""
 import json
+import os
 
 
 class FileStorage:
-    """Serializes instances to a JSON file and deserializes JSON file to instances."""
+    """ Class FileStorage """
 
-    __file_path = "file.json"
+    __file_path = 'file.json'
     __objects = {}
 
     def all(self):
-        """Return the dictionary __objects."""
-        return self.__objects
+        """ Returns the dictionary __objects """
+        return type(self).__objects
 
     def new(self, obj):
-        """Set in __objects the obj with key <obj class name>.id."""
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        self.__objects[key] = obj
+        """ Sets in __objects the obj with key <obj class name>.id """
+
+        FileStorage.__objects[type(obj).__name__ + "." + obj.id] = obj
 
     def save(self):
-        """Serialize __objects to the JSON file."""
-        with open(self.__file_path, "w", encoding="utf-8") as file:
-            obj_dict = {key: obj.to_dict() for key, obj in self.__objects.items()}
-            json.dump(obj_dict, file)
+        """ Serializes __objects to the JSON file __file_path """
+        dict_obj = {}
+        for key, value in FileStorage.__objects.items():
+            dict_obj[key] = value.to_dict()
+        with open(FileStorage.__file_path, "w") as f:
+            json.dump(dict_obj, f)
 
     def reload(self):
-        """Deserialize the JSON file to __objects."""
-        try:
-            with open(self.__file_path, "r", encoding="utf-8") as file:
-                obj_dict = json.load(file)
-                for key, value in obj_dict.items():
-                    class_name, obj_id = key.split(".")
-                    class_instance = globals()[class_name]
-                    self.__objects[key] = class_instance(**value)
-        except FileNotFoundError:
-            pass
+        """ Deserializes the JSON file to __objects if __file_path exists
+        otherwise do nothing, with no exception being reaised """
+        # if file doesnt exists it returns
+        file_name = FileStorage.__file_path
+        if (not os.path.exists(file_name)) or os.stat(file_name).st_size == 0:
+            return
+        from models.base_model import BaseModel
+        from models.amenity import Amenity
+        from models.city import City
+        from models.place import Place
+        from models.review import Review
+        from models.state import State
+        from models.user import User
+
+        classes = {"BaseModel": BaseModel,
+                   "Amenity": Amenity,
+                   "City": City,
+                   "Place": Place,
+                   "Review": Review,
+                   "State": State,
+                   "User": User}
+        with open(FileStorage.__file_path, "r") as f:
+            thing = json.load(f)
+        for key, value in thing.items():
+            if value['__class__'] in classes.keys():
+                value = classes[key.split(".")[0]](**value)
+                FileStorage.__objects.update({key: value})
+            else:
+                print("** class doesn't exist **")
+                FileStorage.__objects.update({key: None})
