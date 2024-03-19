@@ -1,0 +1,39 @@
+.amenities, .reviews {
+	margin-top: 40px;
+    }
+    
+    .amenities h2, .reviews h2 {
+	font-size: 16px;
+	border-bottom: 1px solid #DDDDDD;
+    }
+    
+    .amenities ul, .reviews ul {
+	list-style: none;
+	padding: 0;
+    }
+    
+    .amenities li {
+	background-repeat: no-repeat;
+	padding-left: 25px; /* Adjust size based on actual icon size */
+    }
+    
+    .pet-friendly {
+	background-image: url('../images/icon_pets.png');
+    }
+    
+    .tv {
+	background-image: url('../images/icon_tv.png');
+    }
+    
+    .wifi {
+	background-image: url('../images/icon_wifi.png');
+    }
+    
+    .reviews h3 {
+	font-size: 14px;
+    }
+    
+    .reviews p {
+	font-size: 12px;
+    }
+    

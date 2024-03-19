@@ -1,0 +1,13 @@
+/* Filters styles */
+.filters {
+	/* ... */
+    }
+    
+    /* Responsive filters */
+    @media only screen and (max-width: 768px) {
+	/* Adjust filters layout for smaller screens */
+	.filters {
+	    flex-direction: column;
+	}
+    }
+    

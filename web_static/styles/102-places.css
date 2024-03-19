@@ -1,0 +1,13 @@
+/* Places styles */
+.places {
+	/* ... */
+    }
+    
+    /* Responsive places */
+    @media only screen and (max-width: 768px) {
+	/* Adjust places layout for smaller screens */
+	.places {
+	    flex-direction: column;
+	}
+    }
+    
